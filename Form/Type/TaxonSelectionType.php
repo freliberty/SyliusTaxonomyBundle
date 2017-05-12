@@ -17,6 +17,7 @@ use Sylius\Component\Taxonomy\Model\Taxonomy;
 use Sylius\Component\Taxonomy\Repository\TaxonRepositoryInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ObjectChoiceList;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\Options;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -68,7 +69,7 @@ class TaxonSelectionType extends AbstractType
 
         foreach ($taxonomies as $taxonomy) {
             /* @var $taxonomy Taxonomy */
-            $builder->add($taxonomy->getId(), 'choice', array(
+            $builder->add($taxonomy->getId(), ChoiceType::class, array(
                 'choice_list' => new ObjectChoiceList($this->taxonRepository->getTaxonsAsList($taxonomy)),
                 'multiple'    => $options['multiple'],
                 'label'       => /** @Ignore */ $taxonomy->getName()
@@ -114,8 +115,16 @@ class TaxonSelectionType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'sylius_taxon_selection';
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getBlockPrefix();
     }
 }

@@ -13,6 +13,7 @@ namespace Sylius\Bundle\TaxonomyBundle\Form\Type;
 
 use Sylius\Bundle\TaxonomyBundle\Form\EventListener\BuildTaxonFormListener;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
@@ -55,14 +56,14 @@ class TaxonType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', 'text', array(
+            ->add('name', TextType::class, array(
                 'label' => 'sylius.form.taxon.name'
             ))
-            ->add('permalink', 'text', array(
+            ->add('permalink', TextType::class, array(
                 'required' => false,
                 'label' => 'sylius.form.taxon.permalink'
             ))
-            ->add('description', 'text', array(
+            ->add('description', TextType::class, array(
                 'required' => false,
                 'label' => 'sylius.form.taxon.description'
             ))
@@ -86,8 +87,16 @@ class TaxonType extends AbstractType
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'sylius_taxon';
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->getBlockPrefix();
     }
 }
